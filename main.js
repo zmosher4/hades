@@ -1,64 +1,167 @@
-const { database } = require("./database.js");
+const { database } = require('./database.js');
+const readline = require('readline');
 const {
+  showAttack,
+  showDash,
+  showSpecial,
+  showCast,
+  showCall,
   attackGenorator,
   specialGenorator,
-  castGenorator,
   dashGenorator,
+  castGenorator,
   callGenorator,
-} = require("./functions.js");
-const readline = require("readline");
+} = require('./functions.js');
+console.log(`
+████████████████████████▓▓▓▓▓▓▓██████▓▓▓▓▓▓▓▓▓▓▓▒▒▓███████████████████
+████████████████████████▓▓▓▓▓▓▓█████▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▓██████████████████
+████████████████████████▓▓▓▓▓▓█████▒▓▓▓▓▓▓▓▓▓▓▓▓██████████████████████
+█████████████████████████▓▓▓▓▓▓██▒▒▓▓▓▓█▓▓██▓█████████████████████████
+██████████████████████████▓▓▒▒▓█▓▓▒▓▓▓███▓▓███████████████████████████
+██████████████████████████▓▒▒▒▓█▓████████▓████████████████████████████
+█████████████████████████▓▓▒▒▓▓█▓█████████████████████████████████████
+██████████████████████████▓▓▓▓▓██████▓▓███████████████████████████████
+███████████████████████████▓▓▓▓███████▓███████████████████████████████
+███████████████████████████▓▒▓███▓▓▓▓▓████████████████████████████████
+██████████████████████████▓▒▒▒▓▓▒▒▒▒▒▒▓███████████████████████████████
+███████████████████████████▓▒▒█▓▒▒▒▒▓▓▓██████████████████████████▓████
+█████████████████████████████████▓▓▓████████████▓▓▓▓▓███▓▓██▓█████████
+██████████████████████▓▒▓▓▓███▓▓▒▓███▓▓███▓▒▓▓▓▓▓▓▓▓█▓▒███████████████
+████████████████████▓▒▒▒▒░░░▒▒▓▓▒▒▒▓▓▓▓▓▒▒▓▓▓▓▓▒▓▓▒▒▒▓████████████████
+███████████████████▓▓▓▓▒▒▒▒▒▓▓▓▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▓▓▓▓███▓▓████████████
+████████████████████▓▓▓▓▓▓▒▓▓█▓▓▓▓▓████▓▓▒▒▒▒▓▓▓▓▓▓▓▓██████▓▓▓████████
+█▓▓▓████████████████▓▓▒▒▒▓▓▓▓▓█▓▓▓▓▓▓▓▓▓▒▒▓▓████▓▓▒████▓▓▓▓▓▓▓▓███████
+████████████▓▓▓▓▓█▓▒▓▓▓▓▓▓▓▓▓▓▓▓▒▓▒▒▒▒▓▓▓▓███▓▓██▓▓▓▓▓▓▒▓█▓▓▓▓█▓██████
+▒▒▒▒▒▒▒▒▒▒▒▒▒▓████████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓█▓▓▓▓▓▓▓▓▓▓▓▓█████████████
+█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓█▓▓▓▓▓▓▓█▓▓▓▓▓▓▓▓▓▓███████▓███▓█▓▓▓▓▓▓▓███████████
+███████████████████████▓▓▓▓▓▓▓▓▓▓▓█▓▓███████████▓▓████▓▓▓▓▓███████████
+▓███████████████████████▓▒▓▓▓▓▓▓█████████▓▓▓▓▓██▓█████████▓███████████
+████████████████████████░░░▓▓███████████████▓▓██▓▓█▓▓▓▓███▓▓▓▓██▓█████
+█████▓▒░░░▓▓██▓▓░░░▓▓██░▒░░░███▓▒░░▒▒▒▒▒░▒▓█▓▓▒░░▒▒▒▒▒░▓▓░░▓▓▓▒░▒█████
+███████░░░██████░░▒███▒▒█▓░░░███▓░░▓█████░░░██▓░░▓██▓█▓▓▒░░▓███▒▒█████
+███████▒▒▒▓▓▓▓▓▓░░▒██▒▒▓▓▒▒░░░▓█▓░░▓▓████▒░░▒█▓░░▒▒▒░████▒░░░▒▒▓██████
+███████▒░▒██████▒▒▓██▒███▓▓▓▒▒▓▓▓▒▒▓▓████▓░░▓█▓░░▓▓▓░██████▓▒▒░░▒█████
+█▓█████▒░▒██████░░▒███▓█▓████░░▒▓░░▓█████░░▒██▓░░▓█████▓▓▒█████▒░▓████
+▓▓███▓▒░░░▓▓██▓▒░░░▓▓█████████▒░▒░░░▒▒▒▒░▒▓█▓▓░░░░▒▒▒▒▒░▒░░▒▓▓▒░▒█████
+▓▓▓██▓▓▓▓▓▓▓████████████▓██████▒░▓██▓▓█████████████████████▓▓▓▓██████▓
+▓▓▓▓███▓▓▓▓████████████▓████▓▓▓▓▓░▓█████████▓▓▓▓▓▓▓███████████████████
+██▓▓▓▓▓▓███████████████▓▓▓▓▓▓▓▓▒▒▓▒█████████▓▓███▓▓▓▓█████████████████
+▓▓▓█████████████▓▓█████▓▓▓▓▓▒▒▓████▒████████▓█████████████████████████
+████████████████▓▓████▓▒▒▒▒▒▓██████████████████████████▓▓█████████████
+██████████████▓█▓█████▓▒▒▓██████████████████▓█▓████████▓▓█████████████
+███████████▓▓▓▓▓███████████████████▓███▓▓▓▓▒▓▓▓██████▓▓▓▓███████▓▓▓███
+████████████▓▓▓▓█████████████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓██▓▓▓▓▓▓▓▓▓█████▓▓▓▓▓
+███████████▓▓▓▓▓▓████████████████▒▒▓▓▓▓▓██████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓██▓▓█
+█████████▓▓▓▓▓▓▓▓███████████████▓▒▒▓▓▓▓▓███████████▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███
+███████████▓▓▓▓████████▓████████▓▒▒▓▓▓▓▓▓█████████▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+██████████████████████▓▓████████▓▒▓▓▓▓▓▓▓████████▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+████████▓█████▓▓▓▓▓██▓▓▓▓███████▓▒▓▓▓▓▓▓▓███████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓██████
+████████████▓▓▓▓▓▓▓▓▓▓▓▓▓███████▓▓▓▓▓▓▓▓▓██████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███
+███████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓██████▓▓▓▓▓▓▓▓▓█████▓▓▓▓▓▓▓█████▓▓▓▒▒▒▒▒▓▓▓▓
+████████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▓▓▓██▓▓▓▓▓▓▓███████▓▓▓▓▓▓███████▓▒▒▒▓▓▓▓▓▓▓
+██████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▓▓▓▓▓▓▓▓████████████████████████▓▓▓▓▓
+█████▓▓▓▓▓▓▓▓▓▓▓▓▓████▓▓████▓▓▓▓▓▓▓▓▓▓▓▓▓▓███████████████████████████▓
+████▓▓▓▓▓▓▓▓▓▓▓▓█████▓▓▓███████▓▓▓▓▓▓▓▓▓▓▓▓████████████████████████▓▓▓
+█████▓▓▓▓▓▓▓▓▓█████▓▓▓▓████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███████████████████▓▓▓▓▓▓
+████████▓▓▓▓▓█████▓▓▓▓▓█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓████████▓▓▓▓▓▓▓▓▓
+█████████▓▓▓▓████▓▓▓▓▓██████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
-console.log("ascii");
-// const chosenGod = chooseGod("ares");
-
-console.log("Welcome to the underworld. Here is your build.");
-const attack = attackGenorator(database);
-console.log(
-  `Your attack is ${attack.title} from ${attack.god}. Here is what it does ${attack.description}`
-);
-const special = specialGenorator(database);
-console.log(
-  `Your attack is ${special.title} from ${special.god}. Here is what it does ${special.description}`
-);
-const cast = castGenorator(database);
-console.log(
-  `Your attack is ${cast.title} from ${cast.god}. Here is what it does ${cast.description}`
-);
-const dash = dashGenorator(database);
-console.log(
-  `Your attack is ${dash.title} from ${dash.god}. Here is what it does ${dash.description}`
-);
-const call = callGenorator(database);
-console.log(
-  `Your attack is ${call.title} from ${call.god}. Here is what it does ${call.description}`
-);
-
+`);
+console.log(`
+█     █░▓█████  ██▓     ▄████▄   ▒█████   ███▄ ▄███▓▓█████    ▄▄▄█████▓ ▒█████     ▄▄▄█████▓ ██░ ██ ▓█████     █    ██  ███▄    █ ▓█████▄ ▓█████  ██▀███   █     █░ ▒█████   ██▀███   ██▓    ▓█████▄ 
+▓█░ █ ░█░▓█   ▀ ▓██▒    ▒██▀ ▀█  ▒██▒  ██▒▓██▒▀█▀ ██▒▓█   ▀    ▓  ██▒ ▓▒▒██▒  ██▒   ▓  ██▒ ▓▒▓██░ ██▒▓█   ▀     ██  ▓██▒ ██ ▀█   █ ▒██▀ ██▌▓█   ▀ ▓██ ▒ ██▒▓█░ █ ░█░▒██▒  ██▒▓██ ▒ ██▒▓██▒    ▒██▀ ██▌
+▒█░ █ ░█ ▒███   ▒██░    ▒▓█    ▄ ▒██░  ██▒▓██    ▓██░▒███      ▒ ▓██░ ▒░▒██░  ██▒   ▒ ▓██░ ▒░▒██▀▀██░▒███      ▓██  ▒██░▓██  ▀█ ██▒░██   █▌▒███   ▓██ ░▄█ ▒▒█░ █ ░█ ▒██░  ██▒▓██ ░▄█ ▒▒██░    ░██   █▌
+░█░ █ ░█ ▒▓█  ▄ ▒██░    ▒▓▓▄ ▄██▒▒██   ██░▒██    ▒██ ▒▓█  ▄    ░ ▓██▓ ░ ▒██   ██░   ░ ▓██▓ ░ ░▓█ ░██ ▒▓█  ▄    ▓▓█  ░██░▓██▒  ▐▌██▒░▓█▄   ▌▒▓█  ▄ ▒██▀▀█▄  ░█░ █ ░█ ▒██   ██░▒██▀▀█▄  ▒██░    ░▓█▄   ▌
+░░██▒██▓ ░▒████▒░██████▒▒ ▓███▀ ░░ ████▓▒░▒██▒   ░██▒░▒████▒     ▒██▒ ░ ░ ████▓▒░     ▒██▒ ░ ░▓█▒░██▓░▒████▒   ▒▒█████▓ ▒██░   ▓██░░▒████▓ ░▒████▒░██▓ ▒██▒░░██▒██▓ ░ ████▓▒░░██▓ ▒██▒░██████▒░▒████▓ 
+░ ▓░▒ ▒  ░░ ▒░ ░░ ▒░▓  ░░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░   ░  ░░░ ▒░ ░     ▒ ░░   ░ ▒░▒░▒░      ▒ ░░    ▒ ░░▒░▒░░ ▒░ ░   ░▒▓▒ ▒ ▒ ░ ▒░   ▒ ▒  ▒▒▓  ▒ ░░ ▒░ ░░ ▒▓ ░▒▓░░ ▓░▒ ▒  ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░░ ▒░▓  ░ ▒▒▓  ▒ 
+ ▒ ░ ░   ░ ░  ░░ ░ ▒  ░  ░  ▒     ░ ▒ ▒░ ░  ░      ░ ░ ░  ░       ░      ░ ▒ ▒░        ░     ▒ ░▒░ ░ ░ ░  ░   ░░▒░ ░ ░ ░ ░░   ░ ▒░ ░ ▒  ▒  ░ ░  ░  ░▒ ░ ▒░  ▒ ░ ░    ░ ▒ ▒░   ░▒ ░ ▒░░ ░ ▒  ░ ░ ▒  ▒ 
+ ░   ░     ░     ░ ░   ░        ░ ░ ░ ▒  ░      ░      ░        ░      ░ ░ ░ ▒       ░       ░  ░░ ░   ░       ░░░ ░ ░    ░   ░ ░  ░ ░  ░    ░     ░░   ░   ░   ░  ░ ░ ░ ▒    ░░   ░   ░ ░    ░ ░  ░ 
+   ░       ░  ░    ░  ░░ ░          ░ ░         ░      ░  ░                ░ ░               ░  ░  ░   ░  ░      ░              ░    ░       ░  ░   ░         ░        ░ ░     ░         ░  ░   ░    
+                       ░                                                                                                           ░                                                          ░      
+`);
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-function logAttackNameByIndex(attacksArray, index) {
-  if (index >= 0 && index < attacksArray.length) {
-    const attack = attacksArray[index];
-    console.log(attack);
-  } else {
-    console.log("Invalid index");
-  }
-}
+let chosenGod = '';
 
 // Ask the user for input
 rl.question(
-  'Enter an index (or type "random" for a random attack): ',
+  'Type "random" to generate a random build or "custom" to choose a custom god: ',
   (input) => {
-    if (input.toLowerCase() === "random") {
-      console.log(attack);
-    } else {
-      const index = parseInt(input, 10);
-      logAttackNameByIndex(database.attack, index);
+    if (input.toLowerCase() === 'random') {
+      console.log('Here is your build.');
+      const attack = attackGenorator(database);
+      console.log(
+        `Your attack is ${attack.title} from ${attack.god}. ${attack.description}`
+      );
+      const special = specialGenorator(database);
+      console.log(
+        `Your special is ${special.title} from ${special.god}. ${special.description}`
+      );
+      const cast = castGenorator(database);
+      console.log(
+        `Your cast is ${cast.title} from ${cast.god}. ${cast.description}`
+      );
+      const dash = dashGenorator(database);
+      console.log(
+        `Your dash is ${dash.title} from ${dash.god}. ${dash.description}`
+      );
+      const call = callGenorator(database);
+      console.log(
+        `Your call is ${call.title} from ${call.god}. ${call.description}`
+      );
+    } else if (input.toLowerCase() === 'custom') {
+      rl.question(
+        `choose from these gods (1-7)
+            
+            1. ares
+            2. aphrodite
+            3. artemis
+            4. posiden
+            5. zeus
+            6. athena
+            7. demeter
+                
+        `,
+        (input) => {
+          if (input === '1') {
+            chosenGod = 'areas';
+          } else if (input === '2') {
+            chosenGod = 'aphrodite';
+          } else if (input === '3') {
+            chosenGod = 'artemis';
+          } else if (input === '4') {
+            chosenGod = 'posiden';
+          } else if (input === '5') {
+            chosenGod: 'zeus';
+          } else if (input === '6') {
+            chosenGod = 'athena';
+          } else if (input === '7') {
+            chosenGod = 'demeter';
+          } else {
+            console.log('not a god');
+          }
+          console.log(`The God you have chosen for this run is ${chosenGod}`);
+        }
+      );
+
+      //   rl.question('choose an attack, special, cast, call, or dash', (input) => {
+      //     if (input.toLowerCase() === 'attack') {
+      //       for (i = 0; i < database.attack.length; i++) {
+      //         if (database.attack[i].god === customBuild[i].god) {
+      //           customBuild.push({
+      //             attack: database.attack[i].title,
+      //             description: database.attack[i].description,
+      //           });
+      //         }
+      //       }
+      //       console.log(customBuild);
+      //     }
+      //   });
     }
 
     // Close the readline interface
-    rl.close();
   }
 );

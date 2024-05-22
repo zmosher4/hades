@@ -1,8 +1,7 @@
-const { database } = require("./database.js");
-
+const { database } = require('./database.js');
 const attackGenorator = (data) => {
   const attacks = data.attack;
-  let genoratedAttack = "";
+  let genoratedAttack = '';
   for (i = 0; i < attacks.length; i++) {
     let randomNum = Math.floor(Math.random() * attacks.length);
     genoratedAttack = attacks[randomNum];
@@ -11,7 +10,7 @@ const attackGenorator = (data) => {
 };
 const specialGenorator = (data) => {
   const specials = data.special;
-  let genoratedSpecial = "";
+  let genoratedSpecial = '';
   for (i = 0; i < specials.length; i++) {
     let randomNum = Math.floor(Math.random() * specials.length);
     genoratedSpecial = specials[randomNum];
@@ -20,7 +19,7 @@ const specialGenorator = (data) => {
 };
 const dashGenorator = (data) => {
   const dashes = data.dash;
-  let genoratedDash = "";
+  let genoratedDash = '';
   for (i = 0; i < dashes.length; i++) {
     let randomNum = Math.floor(Math.random() * dashes.length);
     genoratedDash = dashes[randomNum];
@@ -29,7 +28,7 @@ const dashGenorator = (data) => {
 };
 const castGenorator = (data) => {
   const casts = data.cast;
-  let genoratedCast = "";
+  let genoratedCast = '';
   for (i = 0; i < casts.length; i++) {
     let randomNum = Math.floor(Math.random() * casts.length);
     genoratedCast = casts[randomNum];
@@ -38,7 +37,7 @@ const castGenorator = (data) => {
 };
 const callGenorator = (data) => {
   const calls = data.call;
-  let genoratedCall = "";
+  let genoratedCall = '';
   for (i = 0; i < calls.length; i++) {
     let randomNum = Math.floor(Math.random() * calls.length);
     genoratedCall = calls[randomNum];
@@ -46,10 +45,66 @@ const callGenorator = (data) => {
   return genoratedCall;
 };
 
+const showAttack = (god) => {
+  const allAtacks = database.attack;
+  let output = '';
+  for (i = 0; i < allAtacks.length; i++) {
+    if (god === allAtacks[i].god) {
+      output += `${allAtacks[i].title}: ${allAtacks[i].description}`;
+    }
+  }
+  return output;
+};
+const showSpecial = (god) => {
+  const allSpecials = database.special;
+  let output = '';
+  for (i = 0; i < allSpecials.length; i++) {
+    if (god === allSpecials[i].god) {
+      output += `${allSpecials[i].title}: ${allSpecials[i].description}`;
+    }
+  }
+  return output;
+};
+const showDash = (god) => {
+  const allDashes = database.dash;
+  let output = '';
+  for (i = 0; i < allDashes.length; i++) {
+    if (god === allDashes[i].god) {
+      output += `${allDashes[i].title}: ${allDashes[i].description}`;
+    }
+  }
+  return output;
+};
+const showCast = (god) => {
+  const allCasts = database.cast;
+  let output = '';
+  for (i = 0; i < allCasts.length; i++) {
+    if (god === allCasts[i].god) {
+      output += `${allCasts[i].title}: ${allCasts[i].description}`;
+    }
+  }
+  return output;
+};
+const showCall = (god) => {
+  const allCasts = database.cast;
+  let output = '';
+  for (i = 0; i < allCasts.length; i++) {
+    if (god === allCasts[i].god) {
+      output += `${allCasts[i].title}: ${allCasts[i].description}`;
+    }
+  }
+  return output;
+};
+
 module.exports = {
   attackGenorator,
   specialGenorator,
-  dashGenorator,
   castGenorator,
+  dashGenorator,
   callGenorator,
+  showAttack,
+  showCall,
+  showDash,
+  showSpecial,
+  showCast,
 };
