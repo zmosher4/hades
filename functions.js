@@ -45,8 +45,8 @@ const callGenorator = (data) => {
   return genoratedCall;
 };
 
-const showAttack = (god) => {
-  const allAtacks = database.attack;
+const showAttack = (god, data) => {
+  const allAtacks = data.attack;
   let output = '';
   for (i = 0; i < allAtacks.length; i++) {
     if (god === allAtacks[i].god) {
@@ -55,42 +55,42 @@ const showAttack = (god) => {
   }
   return output;
 };
-const showSpecial = (god) => {
-  const allSpecials = database.special;
+const showSpecial = (god, data) => {
+  const allSpecials = data.special;
   let output = '';
   for (i = 0; i < allSpecials.length; i++) {
     if (god === allSpecials[i].god) {
-      output += `${allSpecials[i].title}: ${allSpecials[i].description}`;
+      output = `${allSpecials[i].title}: ${allSpecials[i].description}`;
     }
   }
   return output;
 };
-const showDash = (god) => {
-  const allDashes = database.dash;
+const showDash = (god, data) => {
+  const allDashes = data.dash;
   let output = '';
   for (i = 0; i < allDashes.length; i++) {
     if (god === allDashes[i].god) {
-      output += `${allDashes[i].title}: ${allDashes[i].description}`;
+      output = `${allDashes[i].title}: ${allDashes[i].description}`;
     }
   }
   return output;
 };
-const showCast = (god) => {
-  const allCasts = database.cast;
+const showCast = (god, data) => {
+  const allCasts = data.cast;
   let output = '';
   for (i = 0; i < allCasts.length; i++) {
     if (god === allCasts[i].god) {
-      output += `${allCasts[i].title}: ${allCasts[i].description}`;
+      output = `${allCasts[i].title}: ${allCasts[i].description}`;
     }
   }
   return output;
 };
-const showCall = (god) => {
-  const allCasts = database.cast;
+const showCall = (god, data) => {
+  const allCalls = data.call;
   let output = '';
-  for (i = 0; i < allCasts.length; i++) {
-    if (god === allCasts[i].god) {
-      output += `${allCasts[i].title}: ${allCasts[i].description}`;
+  for (i = 0; i < allCalls.length; i++) {
+    if (god === allCalls[i].god) {
+      output = `${allCalls[i].title}: ${allCalls[i].description}`;
     }
   }
   return output;

@@ -116,52 +116,44 @@ rl.question(
       rl.question(
         `choose from these gods (1-7)
             
-            1. ares
-            2. aphrodite
-            3. artemis
-            4. posiden
-            5. zeus
-            6. athena
-            7. demeter
+            1. Ares
+            2. Aphrodite
+            3. Artemis
+            4. Poseiden
+            5. Zeus
+            6. Athena
+            7. Demeter
                 
         `,
         (input) => {
           if (input === '1') {
-            chosenGod = 'areas';
+            chosenGod = 'Ares';
           } else if (input === '2') {
-            chosenGod = 'aphrodite';
+            chosenGod = 'Aphrodite';
           } else if (input === '3') {
-            chosenGod = 'artemis';
+            chosenGod = 'Artemis';
           } else if (input === '4') {
-            chosenGod = 'posiden';
+            chosenGod = 'Poseidon';
           } else if (input === '5') {
-            chosenGod: 'zeus';
+            chosenGod: 'Zeus';
           } else if (input === '6') {
-            chosenGod = 'athena';
+            chosenGod = 'Athena';
           } else if (input === '7') {
-            chosenGod = 'demeter';
+            chosenGod = 'Demeter';
           } else {
             console.log('not a god');
           }
-          console.log(`The God you have chosen for this run is ${chosenGod}`);
+          console.log(
+            `The God you have chosen for this run is ${chosenGod}. 
+            Your attack is - ${showAttack(chosenGod, database)}
+            Your special is - ${showSpecial(chosenGod, database)}
+            Your cast is - ${showCast(chosenGod, database)}
+            Your dash is - ${showDash(chosenGod, database)}
+            Your call is - ${showCall(chosenGod, database)}
+            `
+          );
         }
       );
-
-      //   rl.question('choose an attack, special, cast, call, or dash', (input) => {
-      //     if (input.toLowerCase() === 'attack') {
-      //       for (i = 0; i < database.attack.length; i++) {
-      //         if (database.attack[i].god === customBuild[i].god) {
-      //           customBuild.push({
-      //             attack: database.attack[i].title,
-      //             description: database.attack[i].description,
-      //           });
-      //         }
-      //       }
-      //       console.log(customBuild);
-      //     }
-      //   });
     }
-
-    // Close the readline interface
   }
 );

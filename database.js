@@ -205,6 +205,12 @@ const database = {
         'Your Cast is a burst of chain-lightning that bounces between foes.',
       god: 'Zeus',
     },
+    {
+      id: 8,
+      title: 'Crush shot',
+      description: 'Your Cast is a wide, short-range blast that inflicts Weak.',
+      god: 'Aphrodite',
+    },
   ],
   call: [
     {
